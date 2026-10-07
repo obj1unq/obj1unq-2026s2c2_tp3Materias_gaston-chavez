@@ -1,0 +1,41 @@
+import materias.*
+
+describe "materias" {
+    const epl = new Materia(materia = "Elementos de Programación y lógica")
+    const mate1 = new Materia(materia = "Matemática 1")
+    const objs1 = new Materia(materia = " Objetos 1")
+    const objs2 = new Materia(materia = " Objetos 2")
+    const objs3 = new Materia(materia = " Objetos 3")
+    const bd = new Materia(materia = "Bases de Datos")
+    const pConc = new Materia(materia = "Programación Concurrente")
+
+    const programacion = new Carrera(materias = #{epl,mate1,objs1,objs2,objs3,bd,pConc})
+
+    const meya = new Materia(materia = "Matemáticas para economía y administración")
+    const tYs = new Materia(materia = "Trabajo y sociedad")
+    const economía = new Materia(materia = " Economía")
+    const desarrollolocal = new Materia(materia = "Desarrollolocal")
+
+    const tuess = new Carrera(materias = #{meya,tYs,economía,desarrollolocal})
+
+    const lea = new Materia(materia = "Lectura y escritura académica")
+    const csp = new Materia(materia = "Ciencias de la Salud, Psicología")
+    const psicologia = new Materia(materia = "Psicología")
+    const antropología = new Materia(materia = "Antropología")
+    const sociología = new Materia(materia = "Sociología")
+
+    const to = new Carrera(materias = #{lea,csp, psicologia,antropología,sociología})
+
+    test "estudiante alex" {
+        const alex = new Estudiante()
+
+        alex.inscribirAlaCarraera(programacion)
+        alex.inscribirAlaCarraera(tuess)
+        assert.equals(#{programacion,tuess}, alex.carrerasInscriptas())
+
+        assert.that(alex.estaInscriptoAlaMateria(bd))
+        assert.notThat(alex.estaInscriptoAlaMateria(psicologia))
+
+        assert.throwsException({alex.inscribirAlaCarraera(programacion)})
+    }
+}
