@@ -44,24 +44,22 @@ describe "materias" {
         alex.inscribirAlaCarraera(programacion)
         alex.inscribirAlaCarraera(tuess)
 
-        alex.registrarMateriaConNota(mate1, 2)
-        alex.registrarMateriaConNota(objs1, 10)
-        alex.registrarMateriaConNota(economía, 6)
-        alex.registrarMateriaConNota(tYs, 8)
-        alex.registrarMateriaConNota(mate1, 8)
-        alex.registrarMateriaConNota(bd, 2)
+        alex.registrarMateria(mate1, 2)
+        alex.registrarMateria(objs1, 10)
+        alex.registrarMateria(economía, 6)
+        alex.registrarMateria(tYs, 8)
+        alex.registrarMateria(mate1, 8)
+        alex.registrarMateria(bd, 2)
 
-        assert.throwsException({alex.registrarMateriaConNota(mate1, 7)})
-        assert.throwsException({alex.registrarMateriaConNota(bd, 12)})
+        assert.throwsException({alex.registrarMateria(mate1, 7)})
+        assert.throwsException({alex.registrarMateria(bd, 12)})
 
         assert.that(alex.estaAprobada(mate1))
 
         assert.notThat(alex.estaAprobada(bd))
 
-        assert.equals(4, alex.materiasAprobadas())
+        assert.equals(9, alex.promedioEn(programacion))
 
-        //assert.equals([objs1,mate1], alex.materiasDeCarrera(programacion))
-
-        //assert.equals(9, alex.promedioMateriasEn(programacion))
+        
     }
 }

@@ -1,7 +1,7 @@
 class Estudiante {
     const materiasAprobadas = #{}
     const carrerasInscriptas = #{}
-    const historialMaterias = []
+    const historialDeMaterias = []
 
     method inscribirAlaCarraera(carrera) {
       self.validarSiPuedeInscribirseAlaCarrera(carrera)
@@ -13,7 +13,7 @@ class Estudiante {
     }
 
     method agregarMateria(materia) {
-      historialMaterias.add(materia)
+      historialDeMaterias.add(materia)
     }
 
     method validarSiPuedeInscribirseAlaCarrera(carrera) {
@@ -34,12 +34,25 @@ class Estudiante {
       return materiasAprobadas
     }
 
-    method registrarMateriaConNota(materia, nota) {
-    self.validarSiEsMateriaAprobada(materia,nota)
-    materiasAprobadas.add(new MateriaYNota(materia = materia, nota = nota))
-  }
+    method registrarMateria(registrarMateria,registrarNota) {
+      self.agregarAHistorialMaterias(registrarMateria,registrarNota)
+      self.agregarMateriaSiEstaAprobada(registrarMateria,registrarNota)
+    }
 
-  method validarSiEstaInscriptoAMateria(materia) {
+    method agregarAHistorialMaterias(registrarMateria,registrarNota) {
+      self.validarSiEstaInscriptoAMateria(registrarMateria)
+      self.validarSiEsNotaValida(registrarNota)
+      self.agregarMateria(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
+    }
+
+    method agregarMateriaSiEstaAprobada(registrarMateria,registrarNota) {
+      self.validarSiEsMateriaAprobada(registrarMateria,registrarNota)
+      if(registrarNota.between(6, 10)){
+        materiasAprobadas.add(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
+      }
+    }
+
+    method validarSiEstaInscriptoAMateria(materia) {
     if (!self.estaInscriptoAlaMateria(materia)) {
       self.error("no esta inscripto a la materia" + materia)
     }
@@ -67,18 +80,21 @@ class Estudiante {
     })
   }
 
-  method notasDeMateriasAprobadasDe(carrera) {
-    return self.materiasDeCarrera(carrera).sum({materiaAprobada => materiaAprobada.nota()})
+  method promedioEn(carrera) {
+    return self.notaDeMateriasEn(carrera) / self.cantidadMateriasAprobadas(carrera)
   }
 
-  method promedioMateriasEn(carrera) {
-    return self.notasDeMateriasAprobadasDe(carrera) / self.materiasDeCarrera(carrera).size()
+  method notaDeMateriasEn(carrera) {
+    return self.materiasAprobadasEn(carrera).sum({materiaAprobada => materiaAprobada.nota()})
   }
 
-  method materiasDeCarrera(carrera) {
-    return materiasAprobadas.filter({materiaAprobada => carrera.tieneMateria(materiaAprobada.materia())}).map({materiaAprobada => materiaAprobada.materia()})
+  method materiasAprobadasEn(carrera) {
+    return materiasAprobadas.filter({materiaAprobada => carrera.tieneMateria(materiaAprobada.materia())})
   }
-  
+
+  method cantidadMateriasAprobadas(carrera) {
+    return self.materiasAprobadasEn(carrera).size()
+  }
 
 }
 
