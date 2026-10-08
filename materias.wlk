@@ -165,4 +165,72 @@ class MateriaYNota {
   }
 }
 
+class HistoriaAcademica {
+  const cursadas = []
 
+  method registrarMateria(registrarMateria,registrarNota) {
+    self.validarSiEsNotaValida(registrarNota)
+    self.validarQueNoEsteAprobada(registrarMateria)
+    self.agregarMateriaACursadas(registrarMateria,registrarNota)
+  }
+
+  method validarSiEsNotaValida(nota) {
+    if(!nota.between(1, 10)) {
+      self.error("la nota es invalida")
+    }
+  }
+
+  method validarQueNoEsteAprobada(materia) {
+    if (self.estaAprobada(materia)) {
+      self.error("la materia ya esta aprobada")
+    }
+  }
+
+  method estaAprobada(materia) {
+    return cursadas.any({ cursada =>
+      cursada.materia() == materia && cursada.nota().between(6, 10)
+    })
+  }
+
+  method agregarMateriaACursadas(registrarMateria,registrarNota) {
+    cursadas.add(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
+  }
+
+  method cursadasDeMateria(materia) {
+    return cursadas.filter({cursada => cursada.materia() == materia})
+  }
+
+  method promedioEn(carrera) {
+    const aprobadas = self.materiasAprobadasEn(carrera)
+    self.validarSiTieneMateriasAprobadas(aprobadas)
+    return self.notaDeMateriasEn(carrera) / self.cantidadMateriasAprobadas(carrera)
+  }
+
+  method notaDeMateriasEn(carrera) {
+    return self.materiasAprobadasEn(carrera).sum({materiaAprobada => materiaAprobada.nota()})
+  }
+
+  method materiasAprobadasEn(carrera) {
+    return cursadas.filter({cursada => carrera.tieneMateria(cursada.materia())})
+  }
+
+  method cantidadMateriasAprobadas(carrera) {
+    return self.materiasAprobadasEn(carrera).size()
+  }
+
+  method validarSiTieneMateriasAprobadas(materiasAprobadas) {
+    if(materiasAprobadas.isEmpty()){
+      self.error("no tiene materias aprobadas")
+    }
+  }
+
+  method promedioEnTodasLasCarreras() {
+    const materiasAprobadas = cursadas.filter({materiaAprobada => materiaAprobada.nota().between(6, 10)})
+    self.validarSiTieneMateriasAprobadas(materiasAprobadas)
+    return self.notas(materiasAprobadas) / cursadas.size()
+  }
+
+  method notas(materias) {
+    return materias.sum({materia => materia.nota()})
+  }
+}
