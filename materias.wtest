@@ -60,7 +60,7 @@ describe "materias" {
 
         assert.equals(9, alex.promedioEn(programacion))
 
-        assert.equals(2, alex.cantidadMateriasAprobadas(programacion))
+        assert.equals(2, alex.historiaAcademica().cantidadMateriasAprobadas(programacion))
 
         assert.equals(7, alex.promedioEn(tuess))
 

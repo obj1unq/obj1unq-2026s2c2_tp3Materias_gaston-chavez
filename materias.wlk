@@ -1,7 +1,10 @@
 class Estudiante {
-    const materiasAprobadas = #{}
     const carrerasInscriptas = #{}
-    const historialDeMaterias = []
+    const historiaAcademica = new HistoriaAcademica()
+
+    method historiaAcademica() {
+      return historiaAcademica
+    }
 
     method inscribirAlaCarraera(carrera) {
       self.validarSiPuedeInscribirseAlaCarrera(carrera)
@@ -10,10 +13,6 @@ class Estudiante {
 
     method agregarCarrera(carrera) {
       carrerasInscriptas.add(carrera)
-    }
-
-    method agregarMateria(materia) {
-      historialDeMaterias.add(materia)
     }
 
     method validarSiPuedeInscribirseAlaCarrera(carrera) {
@@ -34,26 +33,9 @@ class Estudiante {
       return carrerasInscriptas.any({carrera => carrera.tieneMateria(materia)})
     }
 
-    method materiasAprobadas() {
-      return materiasAprobadas
-    }
-
     method registrarMateria(registrarMateria,registrarNota) {
-      self.agregarAHistorialMaterias(registrarMateria,registrarNota)
-      self.agregarMateriaSiEstaAprobada(registrarMateria,registrarNota)
-    }
-
-    method agregarAHistorialMaterias(registrarMateria,registrarNota) {
       self.validarSiEstaInscriptoAMateria(registrarMateria)
-      self.validarSiEsNotaValida(registrarNota)
-      self.agregarMateria(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
-    }
-
-    method agregarMateriaSiEstaAprobada(registrarMateria,registrarNota) {
-      self.validarSiEsMateriaAprobada(registrarMateria,registrarNota)
-      if(registrarNota.between(6, 10)){
-        materiasAprobadas.add(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
-      }
+      historiaAcademica.registrarMateria(registrarMateria, registrarNota)
     }
 
     method validarSiEstaInscriptoAMateria(materia) {
@@ -62,32 +44,13 @@ class Estudiante {
     }
   }
 
-  method validarSiEsMateriaAprobada(materia,nota) {
-    if (self.estaAprobada(materia)) {
-      self.error("la materia ya esta aprobada")
-    }
-  }
-
-  method validarSiEsNotaValida(nota) {
-    if(!nota.between(1, 10)) {
-      self.error("la nota es invalida")
-    }
-  }
-
-  method laNotaEsValida(nota) {
-    return nota.between(1, 10)
-  }
-
   method estaAprobada(materia) {
-    return materiasAprobadas.any({ materiaAprobada =>
-      materiaAprobada.materia() == materia && materiaAprobada.nota().between(6, 10)
-    })
+    return historiaAcademica.estaAprobada(materia)
   }
 
   method promedioEn(carrera) {
     self.validarSiEstaInscriptoA(carrera)
-    self.validarSiTieneMateriasAprobadasEn(carrera)
-    return self.notaDeMateriasEn(carrera) / self.cantidadMateriasAprobadas(carrera)
+    return historiaAcademica.promedioEn(carrera)
   }
 
   method validarSiEstaInscriptoA(carrera) {
@@ -96,38 +59,12 @@ class Estudiante {
     }
   }
 
-  method notaDeMateriasEn(carrera) {
-    return self.materiasAprobadasEn(carrera).sum({materiaAprobada => materiaAprobada.nota()})
-  }
-
-  method materiasAprobadasEn(carrera) {
-    return materiasAprobadas.filter({materiaAprobada => carrera.tieneMateria(materiaAprobada.materia())})
-  }
-
-  method cantidadMateriasAprobadas(carrera) {
-    return self.materiasAprobadasEn(carrera).size()
-  }
-
-  method validarSiTieneMateriasAprobadasEn(carrera) {
-    if(self.cantidadMateriasAprobadas(carrera) == 0){
-      self.error("no tiene materias aprobadas")
-    }
-  }
-
   method promedioEnTodasLasCarreras() {
-    self.validarSiTieneMateriasAprobadas()
-    const notas = materiasAprobadas.sum({materiaAprobada => materiaAprobada.nota()})
-    return notas / materiasAprobadas.size()
-  }
-
-  method validarSiTieneMateriasAprobadas() {
-    if(materiasAprobadas.isEmpty()){
-      self.error("no tiene materias aprobadas")
-    }
+    return historiaAcademica.promedioEnTodasLasCarreras()
   }
 
   method cursadasDeMateria(materia) {
-    return historialDeMaterias.filter({cursada => cursada.materia() == materia})
+    return historiaAcademica.cursadasDeMateria(materia)
   }
 
 }
@@ -196,10 +133,6 @@ class HistoriaAcademica {
     cursadas.add(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
   }
 
-  method cursadasDeMateria(materia) {
-    return cursadas.filter({cursada => cursada.materia() == materia})
-  }
-
   method promedioEn(carrera) {
     const aprobadas = self.materiasAprobadasEn(carrera)
     self.validarSiTieneMateriasAprobadas(aprobadas)
@@ -211,7 +144,8 @@ class HistoriaAcademica {
   }
 
   method materiasAprobadasEn(carrera) {
-    return cursadas.filter({cursada => carrera.tieneMateria(cursada.materia())})
+    return cursadas.filter({cursada => carrera.tieneMateria(cursada.materia()) &&
+    cursada.nota().between(6, 10)})
   }
 
   method cantidadMateriasAprobadas(carrera) {
@@ -227,10 +161,14 @@ class HistoriaAcademica {
   method promedioEnTodasLasCarreras() {
     const materiasAprobadas = cursadas.filter({materiaAprobada => materiaAprobada.nota().between(6, 10)})
     self.validarSiTieneMateriasAprobadas(materiasAprobadas)
-    return self.notas(materiasAprobadas) / cursadas.size()
+    return self.notas(materiasAprobadas) / materiasAprobadas.size()
   }
 
   method notas(materias) {
     return materias.sum({materia => materia.nota()})
+  }
+
+  method cursadasDeMateria(materia) {
+    return cursadas.filter({cursada => cursada.materia() == materia})
   }
 }
