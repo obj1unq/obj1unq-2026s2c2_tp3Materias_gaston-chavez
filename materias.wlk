@@ -17,9 +17,13 @@ class Estudiante {
     }
 
     method validarSiPuedeInscribirseAlaCarrera(carrera) {
-      if(carrerasInscriptas.contains(carrera)) {
+      if(self.estaInscriptoA(carrera)) {
         self.error("ya esta inscripto a esta carrera")
       }
+    }
+
+    method estaInscriptoA(carrera) {
+      return carrerasInscriptas.contains(carrera)
     }
 
     method carrerasInscriptas() {
@@ -81,7 +85,15 @@ class Estudiante {
   }
 
   method promedioEn(carrera) {
+    self.validarSiEstaInscriptoA(carrera)
+    self.validarSiTieneMateriasAprobadasEn(carrera)
     return self.notaDeMateriasEn(carrera) / self.cantidadMateriasAprobadas(carrera)
+  }
+
+  method validarSiEstaInscriptoA(carrera) {
+    if(!self.estaInscriptoA(carrera)){
+      self.error("no esta inscripto a la carrera")
+    }
   }
 
   method notaDeMateriasEn(carrera) {
@@ -94,6 +106,28 @@ class Estudiante {
 
   method cantidadMateriasAprobadas(carrera) {
     return self.materiasAprobadasEn(carrera).size()
+  }
+
+  method validarSiTieneMateriasAprobadasEn(carrera) {
+    if(self.cantidadMateriasAprobadas(carrera) == 0){
+      self.error("no tiene materias aprobadas")
+    }
+  }
+
+  method promedioEnTodasLasCarreras() {
+    self.validarSiTieneMateriasAprobadas()
+    const notas = materiasAprobadas.sum({materiaAprobada => materiaAprobada.nota()})
+    return notas / materiasAprobadas.size()
+  }
+
+  method validarSiTieneMateriasAprobadas() {
+    if(materiasAprobadas.isEmpty()){
+      self.error("no tiene materias aprobadas")
+    }
+  }
+
+  method cursadasDeMateria(materia) {
+    return historialDeMaterias.filter({cursada => cursada.materia() == materia})
   }
 
 }

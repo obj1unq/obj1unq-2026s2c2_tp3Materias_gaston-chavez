@@ -60,6 +60,20 @@ describe "materias" {
 
         assert.equals(9, alex.promedioEn(programacion))
 
-        
+        assert.equals(2, alex.cantidadMateriasAprobadas(programacion))
+
+        assert.equals(7, alex.promedioEn(tuess))
+
+        assert.throwsException({alex.promedioEn(to)}) //al no tener registrado la carrera TO, no se puede chequear el promedio
+
+        alex.inscribirAlaCarraera(to)
+        assert.throwsException({alex.promedioEn(to)}) //al no tener materias aprobadas, no se puede chequear el promedio
+
+        assert.equals(8, alex.promedioEnTodasLasCarreras())
+
+        const cursada = alex.cursadasDeMateria(mate1) //devuelvo una lista con dos mate1 diferentes notas
+
+        assert.equals(2, cursada.get(0).nota()) //obtengo el indice 0 con mate1 con nota 2
+        assert.equals(8, cursada.get(1).nota()) //obtengo el indice 1 con mate1 con nota 8
     }
 }
