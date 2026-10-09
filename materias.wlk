@@ -85,13 +85,13 @@ class Carrera {
 }
 
 class Materia {
+  const carrera //indica a la carrera a la que pertenece
   const materia
   const estudiantes 
-  var requisitos = #{}
-
-  method requisitos(_requisitos) {
-    requisitos = _requisitos
-  }
+  const requisitos 
+  var property anio
+  var property creditos
+  var property creditosNecesarios 
 
   method materia() {
     return materia
@@ -105,15 +105,11 @@ class Materia {
     return self.materiaEstaEnAlgunaCarreraDe(estudiante)     &&
            not self.estudianteTieneAprobadaM(estudiante)     &&
            not self.tieneInscriptoA(estudiante)              &&
-           self.tieneAprobadasMateriasRequisitos(estudiante)
+           self.puedeCumplirRequisito(estudiante)
   }
 
-  method tieneAprobadasMateriasRequisitos(estudiante) {
-    return requisitos.all({requisito => self.tieneAprobadaRequisito(estudiante, requisito)})
-  }
-
-  method tieneAprobadaRequisito(estudiante, requisito) {
-    return estudiante.historiaAcademica().estaAprobada(requisito)
+  method puedeCumplirRequisito(estudiante) {
+    return requisitos.cumpleRequisitos(carrera,estudiante,self)
   }
 
   method materiaEstaEnAlgunaCarreraDe(estudiante) {
@@ -141,6 +137,10 @@ class Materia {
 
   method inscribirEstudiante(estudiante) {
     estudiantes.add(estudiante)
+  }
+
+  method anio() {
+    return anio
   }
 }
 
@@ -227,3 +227,41 @@ class HistoriaAcademica {
     return cursadas.filter({cursada => cursada.materia() == materia})
   }
 }
+
+object creditos {
+  method cumpleRequisitos(carrera,estudiante,materia) {
+    const creditos = estudiante.historiaAcademica().materiasAprobadasEn(carrera).sum({materia => materia.creditos()})
+    return creditos >= materia.creditosNecesarios()
+  }
+}
+
+class Anio {
+  var property anio  
+  method cumpleRequisitos(carrera,estudiante,materia) {
+    const materiasAprobadas = estudiante.historiaAcademica().materiasAprobadasEn(carrera)
+    return materiasAprobadas.all({materiaActual => materiaActual.anio() == materia.anio() - 1})//revisar
+  }
+}
+
+class Correlativas {
+  var requisitos = #{}
+
+  method requisitos(_requisitos) {
+    requisitos = _requisitos
+  }
+
+  method cumpleRequisitos(carrera,estudiante,materia){
+    return requisitos.all({requisito => self.tieneAprobadaRequisito(estudiante, requisito)})
+  }
+
+  method tieneAprobadaRequisito(estudiante, requisito) {
+    return estudiante.historiaAcademica().estaAprobada(requisito)
+  }
+}
+
+object sinRequisitos { //nada
+  method cumpleRequisitos(carrera,estudiante,materia) {
+    return true
+  }
+}
+
