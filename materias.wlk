@@ -87,10 +87,12 @@ class Carrera {
 class Materia {
   const carrera //indica la carrera a la que pertenece la materia
   const estudiantes 
+  const capacidadMaxCupos
   var requisitos 
   var property anio
   var property creditos
   var property creditosNecesarios
+  const estudiantesEnEspera = []
 
   method requisitos(_requisitos) {
     requisitos =_requisitos
@@ -129,7 +131,29 @@ class Materia {
 
   method inscribirEstudianteAM(estudiante) {
     self.validarSiPúedeInscribirseAM(estudiante)
-    self.inscribirEstudiante(estudiante)
+    if(self.tieneCupo()) {
+      self.inscribirEstudiante(estudiante)
+    } else {
+      self.agregarAListaEspera(estudiante)
+    }
+  }
+
+  method darDebaja(estudiante) {
+    estudiantes.remove(estudiante)
+    estudiantes.add(self.estudiantesEnEspera().head())
+    estudiantesEnEspera.remove(self.estudiantesEnEspera().head())
+  }
+
+  method estudiantesEnEspera() {
+    return estudiantesEnEspera
+  }
+
+  method agregarAListaEspera(estudiante) {
+    estudiantesEnEspera.add(estudiante)
+  }
+
+  method tieneCupo() {
+    return estudiantes.size() < capacidadMaxCupos
   }
 
   method validarSiPúedeInscribirseAM(estudiante) {
