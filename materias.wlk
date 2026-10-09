@@ -66,7 +66,6 @@ class Estudiante {
   method cursadasDeMateria(materia) {
     return historiaAcademica.cursadasDeMateria(materia)
   }
-
 }
 
 class Carrera {
@@ -79,13 +78,69 @@ class Carrera {
     method tieneMateria(materia) {
       return materias.contains(materia)
     }
+
+    method materiasEnLaQueSePuedeInscribir(estudiante) {
+      return materias.filter({materia => materia.puedeInscribirA(estudiante)})
+    }
 }
 
 class Materia {
-  const materia 
+  const materia
+  const estudiantes 
+  var requisitos = #{}
+
+  method requisitos(_requisitos) {
+    requisitos = _requisitos
+  }
 
   method materia() {
     return materia
+  }
+
+  method estudiantes() {
+    return estudiantes
+  }
+
+  method puedeInscribirA(estudiante) {
+    return self.materiaEstaEnAlgunaCarreraDe(estudiante)     &&
+           not self.estudianteTieneAprobadaM(estudiante)     &&
+           not self.tieneInscriptoA(estudiante)              &&
+           self.tieneAprobadasMateriasRequisitos(estudiante)
+  }
+
+  method tieneAprobadasMateriasRequisitos(estudiante) {
+    return requisitos.all({requisito => self.tieneAprobadaRequisito(estudiante, requisito)})
+  }
+
+  method tieneAprobadaRequisito(estudiante, requisito) {
+    return estudiante.historiaAcademica().estaAprobada(requisito)
+  }
+
+  method materiaEstaEnAlgunaCarreraDe(estudiante) {
+    return estudiante.estaInscriptoAlaMateria(self)
+  }
+
+  method estudianteTieneAprobadaM(estudiante) {
+    return estudiante.historiaAcademica().estaAprobada(self)
+  }
+
+  method tieneInscriptoA(estudiante) {
+    return estudiantes.contains(estudiante)
+  }
+
+  method inscribirEstudianteAM(estudiante) {
+    self.validarSiPúedeInscribirseAM(estudiante)
+    self.inscribirEstudiante(estudiante)
+  }
+
+  method validarSiPúedeInscribirseAM(estudiante) {
+    if(not self.puedeInscribirA(estudiante)) {
+      self.error("no puede inscribirse a la materia")
+    }
+  }
+
+  method inscribirEstudiante(estudiante) {
+    estudiantes.add(estudiante)
   }
 }
 

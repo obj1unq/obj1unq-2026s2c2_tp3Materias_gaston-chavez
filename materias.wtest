@@ -1,37 +1,65 @@
 import materias.*
 
 describe "materias" {
-    const epl = new Materia(materia = "Elementos de Programación y lógica")
-    const mate1 = new Materia(materia = "Matemática 1")
-    const objs1 = new Materia(materia = " Objetos 1")
-    const objs2 = new Materia(materia = " Objetos 2")
-    const objs3 = new Materia(materia = " Objetos 3")
-    const bd = new Materia(materia = "Bases de Datos")
-    const pConc = new Materia(materia = "Programación Concurrente")
+    //ESTUDIANTES
+    const alex = new Estudiante()
+    const andy = new Estudiante()
+
+    //CARRERA PROGRAMACION
+    const epl = new Materia(materia = "Elementos de Programación y lógica", estudiantes = [])
+    const mate1 = new Materia(materia = "Matemática 1", estudiantes = [])
+    const objs1 = new Materia(materia = " Objetos 1", estudiantes = [])
+    const objs2 = new Materia(materia = " Objetos 2", estudiantes = [])
+    const objs3 = new Materia(materia = " Objetos 3", estudiantes = [])
+    const bd = new Materia(materia = "Bases de Datos", estudiantes = [])
+    const pConc = new Materia(materia = "Programación Concurrente", estudiantes = [])
 
     const programacion = new Carrera(materias = #{epl,mate1,objs1,objs2,objs3,bd,pConc})
 
-    const meya = new Materia(materia = "Matemáticas para economía y administración")
-    const tYs = new Materia(materia = "Trabajo y sociedad")
-    const economía = new Materia(materia = " Economía")
-    const desarrollolocal = new Materia(materia = "Desarrollolocal")
+    //CARRERA TUESS
+    const meya = new Materia(materia = "Matemáticas para economía y administración", estudiantes = [])
+    const tYs = new Materia(materia = "Trabajo y sociedad", estudiantes = [])
+    const economía = new Materia(materia = " Economía", estudiantes = [])
+    const desarrollolocal = new Materia(materia = "Desarrollolocal", estudiantes = [])
 
     const tuess = new Carrera(materias = #{meya,tYs,economía,desarrollolocal})
 
-    const lea = new Materia(materia = "Lectura y escritura académica")
-    const csp = new Materia(materia = "Ciencias de la Salud, Psicología")
-    const psicologia = new Materia(materia = "Psicología")
-    const antropología = new Materia(materia = "Antropología")
-    const sociología = new Materia(materia = "Sociología")
+    //CARRERA TO
+    const lea = new Materia(materia = "Lectura y escritura académica", estudiantes = [])
+    const csp = new Materia(materia = "Ciencias de la Salud, Psicología", estudiantes = [])
+    const psicologia = new Materia(materia = "Psicología", estudiantes = [])
+    const antropología = new Materia(materia = "Antropología", estudiantes = [])
+    const sociología = new Materia(materia = "Sociología", estudiantes = [])
 
     const to = new Carrera(materias = #{lea,csp, psicologia,antropología,sociología})
 
-    const alex = new Estudiante()
+    method initialize(){
 
-    test "estudiante alex" {
+        //REQUISITOS
+        objs2.requisitos(#{objs1, mate1})
+        objs3.requisitos(#{objs2, bd})
+        pConc.requisitos(#{objs1, bd})
+        desarrollolocal.requisitos(#{meya})
 
+        //inscribir estudiantes a las carreras
         alex.inscribirAlaCarraera(programacion)
         alex.inscribirAlaCarraera(tuess)
+        andy.inscribirAlaCarraera(programacion)
+
+        //aprobaciones de alex
+        alex.registrarMateria(mate1, 2)
+        alex.registrarMateria(objs1, 10)
+        alex.registrarMateria(economía, 6)
+        alex.registrarMateria(tYs, 8)
+        alex.registrarMateria(mate1, 8)
+        alex.registrarMateria(bd, 2)
+
+        //aprobaciones de andy
+        andy.registrarMateria(objs1, 10)
+        andy.registrarMateria(mate1, 10)
+    }
+
+    test "estudiante alex" {
         assert.equals(#{programacion,tuess}, alex.carrerasInscriptas())
 
         assert.that(alex.estaInscriptoAlaMateria(bd))
@@ -41,16 +69,6 @@ describe "materias" {
     }
 
     test "Historia academica de Alex" {
-        alex.inscribirAlaCarraera(programacion)
-        alex.inscribirAlaCarraera(tuess)
-
-        alex.registrarMateria(mate1, 2)
-        alex.registrarMateria(objs1, 10)
-        alex.registrarMateria(economía, 6)
-        alex.registrarMateria(tYs, 8)
-        alex.registrarMateria(mate1, 8)
-        alex.registrarMateria(bd, 2)
-
         assert.throwsException({alex.registrarMateria(mate1, 7)})
         assert.throwsException({alex.registrarMateria(bd, 12)})
 
@@ -75,5 +93,21 @@ describe "materias" {
 
         assert.equals(2, cursada.get(0).nota()) //obtengo el indice 0 con mate1 con nota 2
         assert.equals(8, cursada.get(1).nota()) //obtengo el indice 1 con mate1 con nota 8
+    }
+
+    test "inscripciones a materias" {
+        assert.that(objs2.puedeInscribirA(alex))
+        assert.equals(#{epl,objs2,bd}, programacion.materiasEnLaQueSePuedeInscribir(alex))
+        assert.equals(#{meya}, tuess.materiasEnLaQueSePuedeInscribir(alex))
+        assert.notThat(psicologia.puedeInscribirA(alex)) //No está inscripta en la carrera TO
+        assert.throwsException({psicologia.inscribirEstudianteAM(alex)}) //no puede inscribirse a psicologia al no tener la carrera
+        assert.notThat(economía.puedeInscribirA(alex))
+        assert.throwsException({economía.inscribirEstudianteAM(alex)})
+        assert.notThat(desarrollolocal.puedeInscribirA(alex))
+        assert.throwsException({desarrollolocal.inscribirEstudianteAM(alex)})
+        objs2.inscribirEstudianteAM(alex)
+        assert.throwsException({objs2.inscribirEstudianteAM(alex)})
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,andy], objs2.estudiantes())
     }
 }
