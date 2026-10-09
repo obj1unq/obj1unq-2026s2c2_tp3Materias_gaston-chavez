@@ -6,6 +6,10 @@ class Estudiante {
       return historiaAcademica
     }
 
+    method materiasAprobadasEn(carrera) {
+      return historiaAcademica.materiasAprobadasEn(carrera)
+    }
+
     method inscribirAlaCarraera(carrera) {
       self.validarSiPuedeInscribirseAlaCarrera(carrera)
       self.agregarCarrera(carrera)
@@ -81,8 +85,7 @@ class Carrera {
 }
 
 class Materia {
-  const carrera //indica a la carrera a la que pertenece la materia
-  const materia
+  const carrera //indica la carrera a la que pertenece la materia
   const estudiantes 
   var requisitos 
   var property anio
@@ -94,7 +97,7 @@ class Materia {
   }
 
   method materia() {
-    return materia
+    return self
   }
 
   method estudiantes() {
@@ -117,7 +120,7 @@ class Materia {
   }
 
   method estudianteTieneAprobadaM(estudiante) {
-    return estudiante.historiaAcademica().estaAprobada(self)
+    return estudiante.estaAprobada(self)
   }
 
   method tieneInscriptoA(estudiante) {
@@ -189,8 +192,7 @@ class HistoriaAcademica {
   }
 
   method promedioEn(carrera) {
-    const aprobadas = self.materiasAprobadasEn(carrera)
-    self.validarSiTieneMateriasAprobadas(aprobadas)
+    self.validarSiTieneMateriasAprobadas(carrera)
     return self.notaDeMateriasEn(carrera) / self.cantidadMateriasAprobadas(carrera)
   }
 
@@ -207,20 +209,29 @@ class HistoriaAcademica {
     return self.materiasAprobadasEn(carrera).size()
   }
 
-  method validarSiTieneMateriasAprobadas(materiasAprobadas) {
-    if(materiasAprobadas.isEmpty()){
+  method validarSiTieneMateriasAprobadas(carrera) {
+    if(self.materiasAprobadasEn(carrera).isEmpty()){
       self.error("no tiene materias aprobadas")
     }
   }
 
   method promedioEnTodasLasCarreras() {
-    const materiasAprobadas = cursadas.filter({materiaAprobada => materiaAprobada.nota().between(6, 10)})
-    self.validarSiTieneMateriasAprobadas(materiasAprobadas)
-    return self.notas(materiasAprobadas) / materiasAprobadas.size()
+    self.validarSiTieneMateriasAprobadasEnTodasLasCarreras()
+    return self.notasTotalEnTodasLasCarreras() / self.materiasAprobadasEnTodasLasCarreras().size()
   }
 
-  method notas(materias) {
-    return materias.sum({materia => materia.nota()})
+  method notasTotalEnTodasLasCarreras() {
+    return self.materiasAprobadasEnTodasLasCarreras().sum({materia => materia.nota()})
+  }
+
+  method materiasAprobadasEnTodasLasCarreras() {
+    return cursadas.filter({materiaAprobada => materiaAprobada.nota().between(6, 10)})
+  }
+
+  method validarSiTieneMateriasAprobadasEnTodasLasCarreras() {
+    if(self.materiasAprobadasEnTodasLasCarreras().isEmpty()){
+      self.error("no tiene materias aprobadas")
+    }
   }
 
   method cursadasDeMateria(materia) {
@@ -230,15 +241,25 @@ class HistoriaAcademica {
 
 object creditos {
   method cumpleRequisitos(carrera,estudiante,materia) {
-    const creditos = estudiante.historiaAcademica().materiasAprobadasEn(carrera).sum({materia => materia.creditos()})
-    return creditos >= materia.creditosNecesarios()
+    return self.creditosDeMaterias(estudiante,carrera) >= materia.creditosNecesarios()
+  }
+
+  method creditosDeMaterias(estudiante,carrera) {
+    return estudiante.materiasAprobadasEn(carrera).sum({materiaActual => materiaActual.materia().creditos()})
   }
 }
 
 object anio { 
   method cumpleRequisitos(carrera,estudiante,materia) {
-    const materiasAprobadas = estudiante.historiaAcademica().materiasAprobadasEn(carrera)
-    return materiasAprobadas.all({materiaActual => materiaActual.anio() == materia.anio() - 1})//revisar
+    return self.materiasAprobadasAnioPasado(estudiante,carrera,materia) == self.materiasQuePertencenAnioAnterior(carrera,materia)
+  }
+
+  method materiasAprobadasAnioPasado(estudiante,carrera,materia) {
+    return estudiante.materiasAprobadasEn(carrera).filter({materiaActual => materiaActual.materia().anio() == materia.anio() - 1}).size()
+  }
+
+  method materiasQuePertencenAnioAnterior(carrera,materia) {
+    return carrera.materias().filter({materiaActual => materiaActual.anio() == materia.anio()-1}).size()
   }
 }
 
@@ -250,7 +271,7 @@ class Correlativas {
   }
 
   method tieneAprobadaRequisito(estudiante, correlativa) {
-    return estudiante.historiaAcademica().estaAprobada(correlativa)
+    return estudiante.estaAprobada(correlativa)
   }
 }
 

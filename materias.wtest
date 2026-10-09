@@ -6,9 +6,10 @@ describe "materias" {
     const andy = new Estudiante()
 
     //CARRERA PROGRAMACION
+    const programacion = new Carrera()
+
     const epl = new Materia(
-        carrera            = programacion, 
-        materia            = "Elementos de Programación y lógica", 
+        carrera            = programacion,
         estudiantes        = [], 
         requisitos         = sinRequisitos, 
         anio               = 0, 
@@ -18,7 +19,6 @@ describe "materias" {
 
     const mate1 = new Materia(
         carrera            = programacion,
-        materia            = "Matemática 1", 
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 1,
@@ -27,7 +27,16 @@ describe "materias" {
 
     const objs1 = new Materia(
         carrera            = programacion,
-        materia            = " Objetos 1", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const correlativaObjs2 = new Correlativas(correlativas = #{objs1, mate1})
+
+    const bd = new Materia(
+        carrera            = programacion,
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 1,
@@ -36,52 +45,37 @@ describe "materias" {
 
     const objs2 = new Materia(
         carrera            = programacion,
-        materia            = " Objetos 2", 
         estudiantes        = [],
         requisitos         = correlativaObjs2,
         anio               = 0,
         creditos           = 0,
         creditosNecesarios = 0)
 
+    const correlativaObjs3 = new Correlativas(correlativas = #{objs2, bd})
+
     const objs3 = new Materia(
-        carrera            = programacion,
-        materia            = " Objetos 3", 
+        carrera            = programacion, 
         estudiantes        = [],
         requisitos         = correlativaObjs3,
         anio               = 0,
         creditos           = 0,
         creditosNecesarios = 0)
 
-    const bd = new Materia(
-        carrera            = programacion,
-        materia            = "Bases de Datos", 
-        estudiantes        = [],
-        requisitos         = sinRequisitos,
-        anio               = 1,
-        creditos           = 8,
-        creditosNecesarios = 0)
+    const correlativapConc = new Correlativas(correlativas = #{objs1, bd})
 
     const pConc = new Materia(
         carrera            = programacion,
-        materia            = "Programación Concurrente", 
         estudiantes        = [],
-        requisitos         = sinRequisitos,
+        requisitos         = correlativapConc,
         anio               = 0,
         creditos           = 0,
         creditosNecesarios = 0)
 
-    const programacion = new Carrera()
-
-    //correlativas
-    const correlativaObjs2 = new Correlativas(correlativas = #{objs1, mate1})
-    const correlativaObjs3 = new Correlativas(correlativas = #{objs2, bd})
-    const correlativapConc = new Correlativas(correlativas = #{objs1, bd})
-    const correlativaDl = new Correlativas(correlativas = #{meya})
-
     //CARRERA TUESS
+    const tuess = new Carrera()
+
     const meya = new Materia(
         carrera            = tuess,
-        materia            = "Matemáticas para economía y administración",
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 0,
@@ -89,9 +83,10 @@ describe "materias" {
         creditosNecesarios = 0
         )
 
+    const correlativaDl = new Correlativas(correlativas = #{meya})
+
     const tYs = new Materia(
         carrera            = tuess,
-        materia            = "Trabajo y sociedad",
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 0,
@@ -100,7 +95,6 @@ describe "materias" {
     )
     const economía = new Materia(
         carrera            = tuess,
-        materia            = "Economía",
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 0,
@@ -109,20 +103,18 @@ describe "materias" {
     )
     const desarrollolocal = new Materia(
         carrera            = tuess,
-        materia            = "Desarrollolocal",
         estudiantes        = [],
-        requisitos         = sinRequisitos,
+        requisitos         = correlativaDl,
         anio               = 0,
         creditos           = 0,
         creditosNecesarios = 0
     )
 
-    const tuess = new Carrera()
-
     //CARRERA TO
+    const to = new Carrera()
+
     const lea = new Materia(
         carrera            = to,
-        materia            = "Lectura y escritura académica", 
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 1,
@@ -131,7 +123,6 @@ describe "materias" {
 
     const csp = new Materia(
         carrera            = to,
-        materia            = "Ciencias de la Salud", 
         estudiantes        = [],
         requisitos         = sinRequisitos,
         anio               = 1,
@@ -140,7 +131,6 @@ describe "materias" {
 
     const psicologia = new Materia(
         carrera            = to,
-        materia            = "Psicología", 
         estudiantes        = [],
         requisitos         = anio,
         anio               = 2,
@@ -149,7 +139,6 @@ describe "materias" {
 
     const antropología = new Materia(
         carrera            = to,
-        materia            = "Antropología", 
         estudiantes        = [],
         requisitos         = creditos,
         anio               = 2,
@@ -157,16 +146,13 @@ describe "materias" {
         creditosNecesarios = 8)
 
     const sociología = new Materia(
-        carrera            = to,
-        materia            = "Sociología", 
+        carrera            = to, 
         estudiantes        = [],
         requisitos         = creditos,
         anio               = 3,
         creditos           = 8,
         creditosNecesarios = 10)
     
-
-    const to = new Carrera()
 
     method initialize(){
 
@@ -189,12 +175,6 @@ describe "materias" {
         to.materias().add(psicologia)
         to.materias().add(antropología)
         to.materias().add(sociología)
-
-        //REQUISITOS
-        objs2.requisitos(correlativaObjs2)
-        objs3.requisitos(correlativaObjs3)
-        pConc.requisitos(correlativapConc)
-        desarrollolocal.requisitos(correlativaDl)
 
         //inscribir estudiantes a las carreras
         alex.inscribirAlaCarraera(programacion)
@@ -265,4 +245,19 @@ describe "materias" {
         objs2.inscribirEstudianteAM(andy)
         assert.equals([alex,andy], objs2.estudiantes())
     }
+
+    test "Inscripcion de andy" {
+        andy.inscribirAlaCarraera(to)
+        assert.equals(#{lea,csp}, to.materiasEnLaQueSePuedeInscribir(andy))
+        andy.registrarMateria(lea, 10)
+        assert.equals(#{csp,antropología}, to.materiasEnLaQueSePuedeInscribir(andy))
+        andy.registrarMateria(antropología, 10)
+        assert.equals(#{csp,sociología}, to.materiasEnLaQueSePuedeInscribir(andy))
+        andy.registrarMateria(csp, 10)
+        assert.equals(#{psicologia,sociología}, to.materiasEnLaQueSePuedeInscribir(andy))
+        psicologia.inscribirEstudianteAM(andy)
+        sociología.inscribirEstudianteAM(andy)
+        assert.equals([andy], psicologia.estudiantes())
+        assert.equals([andy], sociología.estudiantes())
+    } 
 }
