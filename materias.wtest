@@ -1,4 +1,7 @@
 import materias.*
+import requisitos.*
+import gestionListaEspera.*
+
 
 describe "materias" {
     //ESTUDIANTES
@@ -326,5 +329,61 @@ describe "materias" {
         objs2.darDebaja(luisa)
         assert.equals([alex,romina], objs2.estudiantes())
         assert.equals([andy,alicia], objs2.estudiantesEnEspera())
-    } 
+    }
+    
+    test "bonus parte 2 con elitista" {
+        objs2.gestionEstudiantesEnEspera(elitista)
+        objs2.inscribirEstudianteAM(alex)
+        assert.equals([], objs2.estudiantesEnEspera())
+        objs2.inscribirEstudianteAM(luisa)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([], objs2.estudiantesEnEspera())
+        
+        objs2.inscribirEstudianteAM(romina)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        assert.throwsException({objs2.inscribirEstudianteAM(ana)})
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(alicia)
+        assert.equals([romina,andy,alicia], objs2.estudiantesEnEspera())
+        assert.equals([alex,luisa], objs2.estudiantes())
+        objs2.darDebaja(luisa)
+        assert.equals([alex,andy], objs2.estudiantes())
+        assert.equals([romina,alicia], objs2.estudiantesEnEspera())
+    }
+
+    test "bonus parte 2 con avance" {
+        objs2.gestionEstudiantesEnEspera(avance)
+        objs2.inscribirEstudianteAM(alex)
+        assert.equals([], objs2.estudiantesEnEspera())
+        objs2.inscribirEstudianteAM(luisa)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([], objs2.estudiantesEnEspera())
+        
+        objs2.inscribirEstudianteAM(romina)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        assert.throwsException({objs2.inscribirEstudianteAM(ana)})
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(alicia)
+        assert.equals([romina,andy,alicia], objs2.estudiantesEnEspera())
+        assert.equals([alex,luisa], objs2.estudiantes())
+        objs2.darDebaja(luisa)
+        assert.equals([alex,alicia], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+    }
 }

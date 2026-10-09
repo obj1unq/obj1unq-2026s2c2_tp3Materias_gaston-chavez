@@ -12,7 +12,7 @@ e inscriptas de acuerdo al caso de prueba del punto 3
   Aclarar en texto cuál es el mensaje polimórfico, quién es el emisor del mensaje y 
   cuáles son los objetos autodefinidos o clases que lo implementan.
   -Respuesta:
-   -Link diagrama estatico: https://imgur.com/a/kSWiIOm
+   -Link diagrama estatico(sin el bonus implementado): https://imgur.com/a/kSWiIOm
    -El mensaje polimorfismo es cumpleRequisito(estudiante,carrera,materia)
 
    -El emisor del mensaje cumpleRequisito(estudiante,carrera,materia) es la clase Materia

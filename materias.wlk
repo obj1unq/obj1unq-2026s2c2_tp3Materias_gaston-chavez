@@ -1,7 +1,17 @@
 import requisitos.*
+import gestionListaEspera.*
 class Estudiante {
     const carrerasInscriptas = #{}
     const historiaAcademica = new HistoriaAcademica()
+    const materiasInscriptas = []
+
+    method materiasInscriptas() {
+      return materiasInscriptas
+    }
+
+    method materiasEnLaQueEstaEnListaEspera() {
+      return materiasInscriptas.filter({materia => materia.estudiantesEnEspera().contains(self)})
+    }
 
     method historiaAcademica() {
       return historiaAcademica
@@ -71,6 +81,14 @@ class Estudiante {
   method cursadasDeMateria(materia) {
     return historiaAcademica.cursadasDeMateria(materia)
   }
+
+  method materiasAprobadasEnTodasLasCarreras() {
+    return historiaAcademica.materiasAprobadasEnTodasLasCarreras()
+  }
+
+  method creditosEnTodasLasMaterias() {
+    return historiaAcademica.materiasAprobadasEnTodasLasCarreras().sum({materiaActual => materiaActual.materia().creditos()})
+  }
 }
 
 class Carrera {
@@ -94,6 +112,11 @@ class Materia {
   var property creditos
   var property creditosNecesarios
   const estudiantesEnEspera = []
+  var gestionEstudiantesEnEspera = ordenDeLlegada
+
+  method gestionEstudiantesEnEspera(_gestionEstudiantesEnEspera) {
+    gestionEstudiantesEnEspera = _gestionEstudiantesEnEspera
+  }
 
   method requisitos(_requisitos) {
     requisitos =_requisitos
@@ -134,15 +157,30 @@ class Materia {
     self.validarSiPúedeInscribirseAM(estudiante)
     if(self.tieneCupo()) {
       self.inscribirEstudiante(estudiante)
+      estudiante.materiasInscriptas().add(self)
     } else {
       self.agregarAListaEspera(estudiante)
     }
   }
 
   method darDebaja(estudiante) {
+    self.validarSiExisteEstudianteEnM(estudiante)
     estudiantes.remove(estudiante)
-    estudiantes.add(self.estudiantesEnEspera().head())
-    estudiantesEnEspera.remove(self.estudiantesEnEspera().head())
+    estudiante.materiasInscriptas().remove(self)
+    self.obtenerLugarEnLaMateria()
+  }
+
+  method validarSiExisteEstudianteEnM(estudiante) {
+    if(!estudiantes.contains(estudiante)) {
+      self.error("no existe este estudiante en esta materia")
+    }
+  }
+
+  method obtenerLugarEnLaMateria() {
+    const estudiante = gestionEstudiantesEnEspera.prioridadEnLaCola(estudiantesEnEspera)
+    estudiantes.add(estudiante)
+    estudiante.materiasInscriptas().add(self)
+    estudiantesEnEspera.remove(estudiante)
   }
 
   method estudiantesEnEspera() {
@@ -263,4 +301,3 @@ class HistoriaAcademica {
     return cursadas.filter({cursada => cursada.materia() == materia})
   }
 }
-
