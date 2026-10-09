@@ -44,7 +44,7 @@ class Estudiante {
 
     method validarSiEstaInscriptoAMateria(materia) {
     if (!self.estaInscriptoAlaMateria(materia)) {
-      self.error("no esta inscripto a la materia" + materia)
+      self.error("ya esta inscripto a la materia" + materia)
     }
   }
 
@@ -264,7 +264,7 @@ object anio {
 }
 
 class Correlativas {
-  const correlativas = #{}
+  const correlativas
 
   method cumpleRequisitos(carrera,estudiante,materia){
     return correlativas.all({correlativa => self.tieneAprobadaRequisito(estudiante, correlativa)})
