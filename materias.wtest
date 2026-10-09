@@ -6,40 +6,195 @@ describe "materias" {
     const andy = new Estudiante()
 
     //CARRERA PROGRAMACION
-    const epl = new Materia(materia = "Elementos de Programación y lógica", estudiantes = [])
-    const mate1 = new Materia(materia = "Matemática 1", estudiantes = [])
-    const objs1 = new Materia(materia = " Objetos 1", estudiantes = [])
-    const objs2 = new Materia(materia = " Objetos 2", estudiantes = [])
-    const objs3 = new Materia(materia = " Objetos 3", estudiantes = [])
-    const bd = new Materia(materia = "Bases de Datos", estudiantes = [])
-    const pConc = new Materia(materia = "Programación Concurrente", estudiantes = [])
+    const epl = new Materia(
+        carrera            = programacion, 
+        materia            = "Elementos de Programación y lógica", 
+        estudiantes        = [], 
+        requisitos         = sinRequisitos, 
+        anio               = 0, 
+        creditos           = 0, 
+        creditosNecesarios = 0)
 
-    const programacion = new Carrera(materias = #{epl,mate1,objs1,objs2,objs3,bd,pConc})
+
+    const mate1 = new Materia(
+        carrera            = programacion,
+        materia            = "Matemática 1", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const objs1 = new Materia(
+        carrera            = programacion,
+        materia            = " Objetos 1", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const objs2 = new Materia(
+        carrera            = programacion,
+        materia            = " Objetos 2", 
+        estudiantes        = [],
+        requisitos         = correlativaObjs2,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0)
+
+    const objs3 = new Materia(
+        carrera            = programacion,
+        materia            = " Objetos 3", 
+        estudiantes        = [],
+        requisitos         = correlativaObjs3,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0)
+
+    const bd = new Materia(
+        carrera            = programacion,
+        materia            = "Bases de Datos", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const pConc = new Materia(
+        carrera            = programacion,
+        materia            = "Programación Concurrente", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0)
+
+    const programacion = new Carrera()
+
+    //correlativas
+    const correlativaObjs2 = new Correlativas(correlativas = #{objs1, mate1})
+    const correlativaObjs3 = new Correlativas(correlativas = #{objs2, bd})
+    const correlativapConc = new Correlativas(correlativas = #{objs1, bd})
+    const correlativaDl = new Correlativas(correlativas = #{meya})
 
     //CARRERA TUESS
-    const meya = new Materia(materia = "Matemáticas para economía y administración", estudiantes = [])
-    const tYs = new Materia(materia = "Trabajo y sociedad", estudiantes = [])
-    const economía = new Materia(materia = " Economía", estudiantes = [])
-    const desarrollolocal = new Materia(materia = "Desarrollolocal", estudiantes = [])
+    const meya = new Materia(
+        carrera            = tuess,
+        materia            = "Matemáticas para economía y administración",
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+        )
 
-    const tuess = new Carrera(materias = #{meya,tYs,economía,desarrollolocal})
+    const tYs = new Materia(
+        carrera            = tuess,
+        materia            = "Trabajo y sociedad",
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+    )
+    const economía = new Materia(
+        carrera            = tuess,
+        materia            = "Economía",
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+    )
+    const desarrollolocal = new Materia(
+        carrera            = tuess,
+        materia            = "Desarrollolocal",
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+    )
+
+    const tuess = new Carrera()
 
     //CARRERA TO
-    const lea = new Materia(materia = "Lectura y escritura académica", estudiantes = [])
-    const csp = new Materia(materia = "Ciencias de la Salud, Psicología", estudiantes = [])
-    const psicologia = new Materia(materia = "Psicología", estudiantes = [])
-    const antropología = new Materia(materia = "Antropología", estudiantes = [])
-    const sociología = new Materia(materia = "Sociología", estudiantes = [])
+    const lea = new Materia(
+        carrera            = to,
+        materia            = "Lectura y escritura académica", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
 
-    const to = new Carrera(materias = #{lea,csp, psicologia,antropología,sociología})
+    const csp = new Materia(
+        carrera            = to,
+        materia            = "Ciencias de la Salud", 
+        estudiantes        = [],
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const psicologia = new Materia(
+        carrera            = to,
+        materia            = "Psicología", 
+        estudiantes        = [],
+        requisitos         = anio,
+        anio               = 2,
+        creditos           = 4,
+        creditosNecesarios = 0)
+
+    const antropología = new Materia(
+        carrera            = to,
+        materia            = "Antropología", 
+        estudiantes        = [],
+        requisitos         = creditos,
+        anio               = 2,
+        creditos           = 4,
+        creditosNecesarios = 8)
+
+    const sociología = new Materia(
+        carrera            = to,
+        materia            = "Sociología", 
+        estudiantes        = [],
+        requisitos         = creditos,
+        anio               = 3,
+        creditos           = 8,
+        creditosNecesarios = 10)
+    
+
+    const to = new Carrera()
 
     method initialize(){
 
+        //materias cargadas a sus respectivas carreras
+        programacion.materias().add(epl)
+        programacion.materias().add(mate1)
+        programacion.materias().add(objs1)
+        programacion.materias().add(objs2)
+        programacion.materias().add(objs3)
+        programacion.materias().add(bd)
+        programacion.materias().add(pConc)
+
+        tuess.materias().add(meya)
+        tuess.materias().add(tYs)
+        tuess.materias().add(economía)
+        tuess.materias().add(desarrollolocal)
+
+        to.materias().add(lea)
+        to.materias().add(csp)
+        to.materias().add(psicologia)
+        to.materias().add(antropología)
+        to.materias().add(sociología)
+
         //REQUISITOS
-        objs2.requisitos(#{objs1, mate1})
-        objs3.requisitos(#{objs2, bd})
-        pConc.requisitos(#{objs1, bd})
-        desarrollolocal.requisitos(#{meya})
+        objs2.requisitos(correlativaObjs2)
+        objs3.requisitos(correlativaObjs3)
+        pConc.requisitos(correlativapConc)
+        desarrollolocal.requisitos(correlativaDl)
 
         //inscribir estudiantes a las carreras
         alex.inscribirAlaCarraera(programacion)

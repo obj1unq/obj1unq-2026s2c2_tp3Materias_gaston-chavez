@@ -69,11 +69,7 @@ class Estudiante {
 }
 
 class Carrera {
-    const materias 
-
-    method materias() {
-      return materias
-    }
+    const property materias = #{}
 
     method tieneMateria(materia) {
       return materias.contains(materia)
@@ -85,13 +81,17 @@ class Carrera {
 }
 
 class Materia {
-  const carrera //indica a la carrera a la que pertenece
+  const carrera //indica a la carrera a la que pertenece la materia
   const materia
   const estudiantes 
-  const requisitos 
+  var requisitos 
   var property anio
   var property creditos
-  var property creditosNecesarios 
+  var property creditosNecesarios
+
+  method requisitos(_requisitos) {
+    requisitos =_requisitos
+  }
 
   method materia() {
     return materia
@@ -235,8 +235,7 @@ object creditos {
   }
 }
 
-class Anio {
-  var property anio  
+object anio { 
   method cumpleRequisitos(carrera,estudiante,materia) {
     const materiasAprobadas = estudiante.historiaAcademica().materiasAprobadasEn(carrera)
     return materiasAprobadas.all({materiaActual => materiaActual.anio() == materia.anio() - 1})//revisar
@@ -244,18 +243,14 @@ class Anio {
 }
 
 class Correlativas {
-  var requisitos = #{}
-
-  method requisitos(_requisitos) {
-    requisitos = _requisitos
-  }
+  const correlativas = #{}
 
   method cumpleRequisitos(carrera,estudiante,materia){
-    return requisitos.all({requisito => self.tieneAprobadaRequisito(estudiante, requisito)})
+    return correlativas.all({correlativa => self.tieneAprobadaRequisito(estudiante, correlativa)})
   }
 
-  method tieneAprobadaRequisito(estudiante, requisito) {
-    return estudiante.historiaAcademica().estaAprobada(requisito)
+  method tieneAprobadaRequisito(estudiante, correlativa) {
+    return estudiante.historiaAcademica().estaAprobada(correlativa)
   }
 }
 
