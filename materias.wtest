@@ -1,0 +1,389 @@
+import materias.*
+import requisitos.*
+import gestionListaEspera.*
+
+
+describe "materias" {
+    //ESTUDIANTES
+    const alex = new Estudiante()
+    const andy = new Estudiante()
+    const luisa = new Estudiante()
+    const romina = new Estudiante()
+    const alicia = new Estudiante()
+    const ana = new Estudiante()
+
+    //CARRERA PROGRAMACION
+    const programacion = new Carrera()
+
+    const epl = new Materia(
+        carrera            = programacion,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30, 
+        requisitos         = sinRequisitos, 
+        anio               = 0, 
+        creditos           = 8, 
+        creditosNecesarios = 0)
+
+
+    const mate1 = new Materia(
+        carrera            = programacion,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const objs1 = new Materia(
+        carrera            = programacion,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const correlativaObjs2 = new Correlativas(correlativas = #{objs1, mate1})
+
+    const bd = new Materia(
+        carrera            = programacion,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const objs2 = new Materia(
+        carrera            = programacion,
+        estudiantes        = [],
+        capacidadMaxCupos  = 2,
+        requisitos         = correlativaObjs2,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0)
+
+    const correlativaObjs3 = new Correlativas(correlativas = #{objs2, bd})
+
+    const objs3 = new Materia(
+        carrera            = programacion, 
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = correlativaObjs3,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0)
+
+    const correlativapConc = new Correlativas(correlativas = #{objs1, bd})
+
+    const pConc = new Materia(
+        carrera            = programacion,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = correlativapConc,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0)
+
+    //CARRERA TUESS
+    const tuess = new Carrera()
+
+    const meya = new Materia(
+        carrera            = tuess,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+        )
+
+    const correlativaDl = new Correlativas(correlativas = #{meya})
+
+    const tYs = new Materia(
+        carrera            = tuess,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+    )
+    const economía = new Materia(
+        carrera            = tuess,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+    )
+    const desarrollolocal = new Materia(
+        carrera            = tuess,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = correlativaDl,
+        anio               = 0,
+        creditos           = 0,
+        creditosNecesarios = 0
+    )
+
+    //CARRERA TO
+    const to = new Carrera()
+
+    const lea = new Materia(
+        carrera            = to,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const csp = new Materia(
+        carrera            = to,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = sinRequisitos,
+        anio               = 1,
+        creditos           = 8,
+        creditosNecesarios = 0)
+
+    const psicologia = new Materia(
+        carrera            = to,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = anio,
+        anio               = 2,
+        creditos           = 4,
+        creditosNecesarios = 0)
+
+    const antropología = new Materia(
+        carrera            = to,
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = creditos,
+        anio               = 2,
+        creditos           = 4,
+        creditosNecesarios = 8)
+
+    const sociología = new Materia(
+        carrera            = to, 
+        estudiantes        = [],
+        capacidadMaxCupos  = 30,
+        requisitos         = creditos,
+        anio               = 3,
+        creditos           = 8,
+        creditosNecesarios = 10)
+    
+
+    method initialize(){
+
+        //materias cargadas a sus respectivas carreras
+        programacion.materias().add(epl)
+        programacion.materias().add(mate1)
+        programacion.materias().add(objs1)
+        programacion.materias().add(objs2)
+        programacion.materias().add(objs3)
+        programacion.materias().add(bd)
+        programacion.materias().add(pConc)
+
+        tuess.materias().add(meya)
+        tuess.materias().add(tYs)
+        tuess.materias().add(economía)
+        tuess.materias().add(desarrollolocal)
+
+        to.materias().add(lea)
+        to.materias().add(csp)
+        to.materias().add(psicologia)
+        to.materias().add(antropología)
+        to.materias().add(sociología)
+
+        //inscribir estudiantes a las carreras
+        alex.inscribirAlaCarraera(programacion)
+        alex.inscribirAlaCarraera(tuess)
+        andy.inscribirAlaCarraera(programacion)
+        luisa.inscribirAlaCarraera(programacion)
+        romina.inscribirAlaCarraera(programacion)
+        alicia.inscribirAlaCarraera(programacion)
+        ana.inscribirAlaCarraera(programacion)
+
+        //registro de materias de alex
+        alex.registrarMateria(mate1, 2)
+        alex.registrarMateria(objs1, 10)
+        alex.registrarMateria(economía, 6)
+        alex.registrarMateria(tYs, 8)
+        alex.registrarMateria(mate1, 8)
+        alex.registrarMateria(bd, 2)
+
+        //registro de materias de andy
+        andy.registrarMateria(objs1, 10)
+        andy.registrarMateria(mate1, 10)
+
+        //registro de materias luisa
+        luisa.registrarMateria(objs1, 8)
+        luisa.registrarMateria(mate1, 7)
+
+        //registro de materias romina
+        romina.registrarMateria(objs1, 6)
+        romina.registrarMateria(mate1, 6)
+
+        //registro de materias alicia
+        alicia.registrarMateria(objs1, 10)
+        alicia.registrarMateria(mate1, 9)
+        alicia.registrarMateria(epl, 6)
+
+        //registro de materias ana
+        ana.registrarMateria(objs1, 10)
+    }
+
+    test "estudiante alex" {
+        assert.equals(#{programacion,tuess}, alex.carrerasInscriptas())
+
+        assert.that(alex.estaInscriptoAlaMateria(bd))
+        assert.notThat(alex.estaInscriptoAlaMateria(psicologia))
+
+        assert.throwsException({alex.inscribirAlaCarraera(programacion)})
+    }
+
+    test "Historia academica de Alex" {
+        assert.throwsException({alex.registrarMateria(mate1, 7)})
+        assert.throwsException({alex.registrarMateria(bd, 12)})
+
+        assert.that(alex.estaAprobada(mate1))
+
+        assert.notThat(alex.estaAprobada(bd))
+
+        assert.equals(9, alex.promedioEn(programacion))
+
+        assert.equals(2, alex.historiaAcademica().cantidadMateriasAprobadas(programacion))
+
+        assert.equals(7, alex.promedioEn(tuess))
+
+        assert.throwsException({alex.promedioEn(to)}) //al no tener registrado la carrera TO, no se puede chequear el promedio
+
+        alex.inscribirAlaCarraera(to)
+        assert.throwsException({alex.promedioEn(to)}) //al no tener materias aprobadas, no se puede chequear el promedio
+
+        assert.equals(8, alex.promedioEnTodasLasCarreras())
+
+        const cursada = alex.cursadasDeMateria(mate1) //devuelvo una lista con dos mate1 diferentes notas
+
+        assert.equals(2, cursada.get(0).nota()) //obtengo el indice 0 con mate1 con nota 2
+        assert.equals(8, cursada.get(1).nota()) //obtengo el indice 1 con mate1 con nota 8
+    }
+
+    test "inscripciones a materias" {
+        assert.that(objs2.puedeInscribirA(alex))
+        assert.equals(#{epl,objs2,bd}, programacion.materiasEnLaQueSePuedeInscribir(alex))
+        assert.equals(#{meya}, tuess.materiasEnLaQueSePuedeInscribir(alex))
+        assert.notThat(psicologia.puedeInscribirA(alex)) //No está inscripta en la carrera TO
+        assert.throwsException({psicologia.inscribirEstudianteAM(alex)}) //no puede inscribirse a psicologia al no tener la carrera
+        assert.notThat(economía.puedeInscribirA(alex))
+        assert.throwsException({economía.inscribirEstudianteAM(alex)})
+        assert.notThat(desarrollolocal.puedeInscribirA(alex))
+        assert.throwsException({desarrollolocal.inscribirEstudianteAM(alex)})
+        objs2.inscribirEstudianteAM(alex)
+        assert.throwsException({objs2.inscribirEstudianteAM(alex)})
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,andy], objs2.estudiantes())
+    }
+
+    test "Inscripcion de andy" {
+        andy.inscribirAlaCarraera(to)
+        assert.equals(#{lea,csp}, to.materiasEnLaQueSePuedeInscribir(andy))
+        andy.registrarMateria(lea, 10)
+        assert.equals(#{csp,antropología}, to.materiasEnLaQueSePuedeInscribir(andy))
+        andy.registrarMateria(antropología, 10)
+        assert.equals(#{csp,sociología}, to.materiasEnLaQueSePuedeInscribir(andy))
+        andy.registrarMateria(csp, 10)
+        assert.equals(#{psicologia,sociología}, to.materiasEnLaQueSePuedeInscribir(andy))
+        psicologia.inscribirEstudianteAM(andy)
+        sociología.inscribirEstudianteAM(andy)
+        assert.equals([andy], psicologia.estudiantes())
+        assert.equals([andy], sociología.estudiantes())
+    }
+
+    test "Bonus 1 Lista de espera" {
+        objs2.inscribirEstudianteAM(alex)
+        assert.equals([], objs2.estudiantesEnEspera())
+        objs2.inscribirEstudianteAM(luisa)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([], objs2.estudiantesEnEspera())
+        
+        objs2.inscribirEstudianteAM(romina)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        assert.throwsException({objs2.inscribirEstudianteAM(ana)})
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(alicia)
+        assert.equals([romina,andy,alicia], objs2.estudiantesEnEspera())
+        assert.equals([alex,luisa], objs2.estudiantes())
+        objs2.darDebaja(luisa)
+        assert.equals([alex,romina], objs2.estudiantes())
+        assert.equals([andy,alicia], objs2.estudiantesEnEspera())
+    }
+    
+    test "bonus parte 2 con elitista" {
+        objs2.gestionEstudiantesEnEspera(elitista)
+        objs2.inscribirEstudianteAM(alex)
+        assert.equals([], objs2.estudiantesEnEspera())
+        objs2.inscribirEstudianteAM(luisa)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([], objs2.estudiantesEnEspera())
+        
+        objs2.inscribirEstudianteAM(romina)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        assert.throwsException({objs2.inscribirEstudianteAM(ana)})
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(alicia)
+        assert.equals([romina,andy,alicia], objs2.estudiantesEnEspera())
+        assert.equals([alex,luisa], objs2.estudiantes())
+        objs2.darDebaja(luisa)
+        assert.equals([alex,andy], objs2.estudiantes())
+        assert.equals([romina,alicia], objs2.estudiantesEnEspera())
+    }
+
+    test "bonus parte 2 con avance" {
+        objs2.gestionEstudiantesEnEspera(avance)
+        objs2.inscribirEstudianteAM(alex)
+        assert.equals([], objs2.estudiantesEnEspera())
+        objs2.inscribirEstudianteAM(luisa)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([], objs2.estudiantesEnEspera())
+        
+        objs2.inscribirEstudianteAM(romina)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        assert.throwsException({objs2.inscribirEstudianteAM(ana)})
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(andy)
+        assert.equals([alex,luisa], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+
+        objs2.inscribirEstudianteAM(alicia)
+        assert.equals([romina,andy,alicia], objs2.estudiantesEnEspera())
+        assert.equals([alex,luisa], objs2.estudiantes())
+        objs2.darDebaja(luisa)
+        assert.equals([alex,alicia], objs2.estudiantes())
+        assert.equals([romina,andy], objs2.estudiantesEnEspera())
+    }
+}
