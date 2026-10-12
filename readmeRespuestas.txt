@@ -1,12 +1,12 @@
 - Realizar un diagrama dinámico que muestre la relación entre Alex, sus materias cursadas (con la nota) 
 e inscriptas de acuerdo al caso de prueba del punto 3
   -Respuesta:
-   -diagrama dinamico: cuando quiero crear una instancia en el repl, me tira el error "error expression.descendants is not iterable"
+   -cuando quiero crear una instancia en el repl, me tira el error "error expression.descendants is not iterable", por lo tanto no puedo mostrar el diagrama dinamico
 
 
 - Realizar un diagrama estático que muestre los tipos/clases involucrados que se ven en el diagrama dinámico del punto anterior
   -Respuesta:
-   -Link driagrama estatico: https://imgur.com/a/1xy4zVo
+   -Link diagrama estatico: https://imgur.com/a/1xy4zVo
 
 - Mostrar un diagrama estático que refleje el polimorfismo usado en el punto 4 (requisitos de la materia). 
   Aclarar en texto cuál es el mensaje polimórfico, quién es el emisor del mensaje y 
