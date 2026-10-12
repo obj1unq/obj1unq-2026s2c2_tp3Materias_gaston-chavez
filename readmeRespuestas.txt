@@ -6,13 +6,14 @@ e inscriptas de acuerdo al caso de prueba del punto 3
 
 - Realizar un diagrama estático que muestre los tipos/clases involucrados que se ven en el diagrama dinámico del punto anterior
   -Respuesta:
-   -Link driagrama estatico: https://imgur.com/a/0QEV3r6
+   -Link driagrama estatico: https://imgur.com/a/1xy4zVo
 
 - Mostrar un diagrama estático que refleje el polimorfismo usado en el punto 4 (requisitos de la materia). 
   Aclarar en texto cuál es el mensaje polimórfico, quién es el emisor del mensaje y 
   cuáles son los objetos autodefinidos o clases que lo implementan.
   -Respuesta:
    -Link diagrama estatico(sin el bonus implementado): https://imgur.com/a/kSWiIOm
+
    -El mensaje polimorfismo es cumpleRequisito(estudiante,carrera,materia)
 
    -El emisor del mensaje cumpleRequisito(estudiante,carrera,materia) es la clase Materia
