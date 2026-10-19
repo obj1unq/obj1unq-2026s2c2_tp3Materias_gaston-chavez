@@ -240,8 +240,8 @@ describe "materias" {
     test "estudiante alex" {
         assert.equals(#{programacion,tuess}, alex.carrerasInscriptas())
 
-        assert.that(alex.estaInscriptoAlaMateria(bd))
-        assert.notThat(alex.estaInscriptoAlaMateria(psicologia))
+        assert.that(alex.estaInscriptoAlaCarreraDe(bd))
+        assert.notThat(alex.estaInscriptoAlaCarreraDe(psicologia))
 
         assert.throwsException({alex.inscribirAlaCarraera(programacion)})
     }

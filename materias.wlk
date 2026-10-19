@@ -10,7 +10,7 @@ class Estudiante {
     }
 
     method materiasEnLaQueEstaEnListaEspera() {
-      return materiasInscriptas.filter({materia => materia.estudiantesEnEspera().contains(self)})
+      return materiasInscriptas.filter({materia => materia.tieneEstudiante(self)})
     }
 
     method historiaAcademica() {
@@ -44,17 +44,17 @@ class Estudiante {
       return carrerasInscriptas
     }
 
-    method estaInscriptoAlaMateria(materia) {
+    method estaInscriptoAlaCarreraDe(materia) {
       return carrerasInscriptas.any({carrera => carrera.tieneMateria(materia)})
     }
 
-    method registrarMateria(registrarMateria,registrarNota) {
-      self.validarSiEstaInscriptoAMateria(registrarMateria)
-      historiaAcademica.registrarMateria(registrarMateria, registrarNota)
+    method registrarMateria(materia,nota) {
+      self.validarSiEstaInscriptoAMateria(materia)
+      historiaAcademica.registrarMateria(materia, nota)
     }
 
     method validarSiEstaInscriptoAMateria(materia) {
-    if (!self.estaInscriptoAlaMateria(materia)) {
+    if (!self.estaInscriptoAlaCarreraDe(materia)) {
       self.error("ya esta inscripto a la materia" + materia)
     }
   }
@@ -130,23 +130,19 @@ class Materia {
     return estudiantes
   }
 
+  method tieneAEstudiante(estudiante) {
+    return estudiantes.contains(estudiante)
+  }
+
   method puedeInscribirA(estudiante) {
-    return self.materiaEstaEnAlgunaCarreraDe(estudiante)     &&
-           not self.estudianteTieneAprobadaM(estudiante)     &&
+    return estudiante.estaInscriptoAlaCarreraDe(self)     &&
+           not estudiante.estaAprobada(self)     &&
            not self.tieneInscriptoA(estudiante)              &&
            self.puedeCumplirRequisito(estudiante)
   }
 
   method puedeCumplirRequisito(estudiante) {
     return requisitos.cumpleRequisitos(carrera,estudiante,self)
-  }
-
-  method materiaEstaEnAlgunaCarreraDe(estudiante) {
-    return estudiante.estaInscriptoAlaMateria(self)
-  }
-
-  method estudianteTieneAprobadaM(estudiante) {
-    return estudiante.estaAprobada(self)
   }
 
   method tieneInscriptoA(estudiante) {
@@ -221,15 +217,19 @@ class MateriaYNota {
   method nota() {
     return nota
   }
+
+  method estaAprobada() {
+    return nota.between(6,10)
+  }
 }
 
 class HistoriaAcademica {
   const cursadas = []
 
-  method registrarMateria(registrarMateria,registrarNota) {
-    self.validarSiEsNotaValida(registrarNota)
-    self.validarQueNoEsteAprobada(registrarMateria)
-    self.agregarMateriaACursadas(registrarMateria,registrarNota)
+  method registrarMateria(materia,nota) {
+    self.validarSiEsNotaValida(nota)
+    self.validarQueNoEsteAprobada(materia)
+    self.agregarMateriaACursadas(materia,nota)
   }
 
   method validarSiEsNotaValida(nota) {
@@ -246,9 +246,10 @@ class HistoriaAcademica {
 
   method estaAprobada(materia) {
     return cursadas.any({ cursada =>
-      cursada.materia() == materia && cursada.nota().between(6, 10)
+      cursada.materia() == materia && cursada.estaAprobada()
     })
   }
+
 
   method agregarMateriaACursadas(registrarMateria,registrarNota) {
     cursadas.add(new MateriaYNota(materia = registrarMateria, nota = registrarNota))
